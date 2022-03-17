@@ -157,7 +157,7 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
         let gclink = (`https://chat.whatsapp.com/`+await bat.groupInviteCode(m.chat))
         let isLinkThisGc = new RegExp(gclink, 'i')
         let isgclink = isLinkThisGc.test(m.text)
-        if (isgclink) return m.reply(`rlx vc enviou um link do grupo kkkk ficou com medo?`)
+        if (isgclink) return m.reply(`「 ANTI LINK 」\n\nrlx vc enviou um link do grupo, por conta disto eu não irei te banir.`)
         if (isAdmins) return //m.reply(`você é um administrador`)
         if (isCreator) return //m.reply(`você é o dono do meu bot`)
         bat.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
@@ -1004,56 +1004,7 @@ case 'cpf2':
                 apii = await fetchJson(`${global.apidados}/cpf2/${query}/${global.apiToken}`)
  
               if (apii.Cpf != undefined) {
-    consulta = `═════════════════════
-🕵️  CONSULTA REALIZADA  🕵️
-═════════════════════
-
- INFORMAÇÕES DO CPF (base 2): 
-
- • *CPF:* ${apii.Cpf}
- • *CNS:* ${apii.Cns}
- • *RG:* ${apii.Rg}
- • *DATA DE EXPEDIÇÃO:* ${apii.DataDeExpedição}
- • *ORGÃO EXPEDIDOR:* ${apii.OrgãoExpedidor}
- • *UF - RG:* ${apii. UfRg}
-
- • *TÍTULO ELEITORAL:* ${apii. TítuloEleitoral}
-
- • *NOME:* ${apii.Nome}
- • *DATA DE NASCIMENTO:* ${apii.Nascimento}
- • *IDADE:* ${apii.Idade}
- • *SIGNO:* ${apii.Signo}
-
- • *SEXO:* ${apii.Sexo}
- • *COR:* ${apii.Cor}
- • *TIPO SANGUÍNEO:* ${apii.TipoSanguíneo}
-
- • *MÃE:* ${apii.Mãe}
- • *PAI:* ${apii.Pai}
-
- • *PAÍS DE NASCIMENTO:* ${apii.PaísDeNascimento}
- • *CIDADE DE NASCIMENTO:* ${apii.CidadeDeNascimento}
- • *ESTADO DE NASCIMENTO:* ${apii.EstadoDeNascimento}
-
- • *LOGRADOURO:* ${apii.Logradouro}
- • *NÚMERO:* ${apii.Número}
- • *COMPLEMENTO:* ${apii.Complemento}
- • *BAIRRO:* ${apii.Bairro}
- • *CIDADE:* ${apii.Cidade}
- • *ESTADO:* ${apii.Estado}
- • *PAÍS:* ${apii.País}
- • *CEP:* ${apii.Cep}
-
- • *E-MAIL:* ${apii.Email}
-
- • *TELEFONE:* ${apii.Telefone}
-
-
- • *Usuario:* ${pushname}
-
-🔛 BY: KARMA BOT
-
-━━━━━━━━━━━━━━━━━━`
+    consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES DO CPF (base 2): \n\n • *CPF:* ${apii.Cpf}\n • *CNS:* ${apii.Cns}\n • *RG:* ${apii.Rg}\n • *DATA DE EXPEDIÇÃO:* ${apii.DataDeExpedição}\n • *ORGÃO EXPEDIDOR:* ${apii.OrgãoExpedidor}\n • *UF - RG:* ${apii. UfRg}\n\n • *TÍTULO ELEITORAL:* ${apii. TítuloEleitoral}\n\n • *NOME:* ${apii.Nome}\n • *DATA DE NASCIMENTO:* ${apii.Nascimento}\n • *IDADE:* ${apii.Idade}\n • *SIGNO:* ${apii.Signo}\n\n • *SEXO:* ${apii.Sexo}\n • *COR:* ${apii.Cor}\n • *TIPO SANGUÍNEO:* ${apii.TipoSanguíneo}\n\n • *MÃE:* ${apii.Mãe}\n • *PAI:* ${apii.Pai}\n\n • *PAÍS DE NASCIMENTO:* ${apii.PaísDeNascimento}\n • *CIDADE DE NASCIMENTO:* ${apii.CidadeDeNascimento}\n • *ESTADO DE NASCIMENTO:* ${apii.EstadoDeNascimento}\n\n • *LOGRADOURO:* ${apii.Logradouro}\n • *NÚMERO:* ${apii.Número}\n • *COMPLEMENTO:* ${apii.Complemento}\n • *BAIRRO:* ${apii.Bairro}\n • *CIDADE:* ${apii.Cidade}\n • *ESTADO:* ${apii.Estado}\n • *PAÍS:* ${apii.País}\n • *CEP:* ${apii.Cep}\n\n • *E-MAIL:* ${apii.Email}\n\n • *TELEFONE:* ${apii.Telefone}\n\n\n • *Usuario:* ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
 m.reply(consulta)
 } else {
     m.reply(`⚠️ CPF NÃO ENCONTRADO!`)
@@ -1181,30 +1132,7 @@ if (xx.Nome != undefined) {
                 xx = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)
  
 if (xx.Nome != undefined) {
-    consulta = `═════════════════════
-🕵️  CONSULTA REALIZADA  🕵️
-═════════════════════
-            
- INFORMAÇÕES:
-
-• *NOME:* ${xx.Nome}
-• *CPF:* ${xx.CpfCnpj} 
-
- ENDEREÇO:
-
- • *ESTADO:* ${xx.Estado}
- • *CIDADE:* ${xx.Cidade}
- • *BAIRRO:* ${xx.Bairro}
- • *COMPLEMENTO:* ${xx.Complemento}
- • *RUA:* ${xx.Logradouro}
- • *NUMERO:* ${xx.Número}
-
-
- • *Usuario:* ${pushname}
-
- 🔛 BY: KARMA BOT
-
-━━━━━━━━━━━━━━━━━━`
+    consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES:\n\n• *NOME:* ${xx.Nome}\n• *CPF:* ${xx.CpfCnpj} \n\n ENDEREÇO:\n\n • *ESTADO:* ${xx.Estado}\n • *CIDADE:* ${xx.Cidade}\n • *BAIRRO:* ${xx.Bairro}\n • *COMPLEMENTO:* ${xx.Complemento}\n • *RUA:* ${xx.Logradouro}\n • *NUMERO:* ${xx.Número}\n\n\n • *Usuario:* ${pushname}\n\n 🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
 m.reply(consulta)
   
 } else {
@@ -1238,7 +1166,6 @@ m.reply(consulta)
                 if (xx.CpfCnpj != undefined) {
                 apii = await fetchJson(`https://apido.herokuapp.com/cpf2/${xx.CpfCnpj}/${global.apiToken}`)
 
-
                   consulta = 
     consulta = `${apii.consulta}
 
@@ -1264,29 +1191,7 @@ m.reply(consulta)
         m.reply(`Estou consultando, mas nota-se que seu numero só tem *10 digitos*, então fiz uma pequena mudança *adicionando* um 9.\n\nEra assim: ${resultado2}\nDeixei assim: ${resultado3}\n\n Caso eu tenha configurado errado, ajuste manualmente e puxe usando o /tel`);
         xxa = await fetchJson(`${global.apidados}/telefone/${resultado3}/${global.apiToken}`)
         if (xxa.Nome != undefined) {
-        consultaa = `═════════════════════
-🕵️  CONSULTA REALIZADA  🕵️
-═════════════════════
-
-INFORMAÇÕES:
-        
- • *NOME:* ${xxa.Nome}
- • *CPF:* ${xxa.CpfCnpj} 
-        
-ENDEREÇO:
-        
- • *ESTADO:* ${xxa.Estado}
- • *CIDADE:* ${xxa.Cidade}
- • *BAIRRO:* ${xxa.Bairro}
- • *COMPLEMENTO:* ${xxa.Complemento}
- • *RUA:* ${xxa.Logradouro}
- • *NUMERO:* ${xxa.Número}
-
- • *Usuario:* ${pushname}
-
-🔛 BY: KARMA BOT
-
-━━━━━━━━━━━━━━━━━━`
+        consultaa = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\nINFORMAÇÕES:\n\n • *NOME:* ${xxa.Nome}\n • *CPF:* ${xxa.CpfCnpj} \n\nENDEREÇO:\n\n • *ESTADO:* ${xxa.Estado}\n • *CIDADE:* ${xxa.Cidade}\n • *BAIRRO:* ${xxa.Bairro}\n • *COMPLEMENTO:* ${xxa.Complemento}\n • *RUA:* ${xxa.Logradouro}\n • *NUMERO:* ${xxa.Número}\n\n • *Usuario:* ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
         m.reply(consultaa) 
     } else {
     
@@ -1298,25 +1203,7 @@ ENDEREÇO:
                 m.reply(`Aguarde ${pushname}, estou consultando os dados dessa pessoa...`)
     xx = await fetchJson(`${global.apidados}/telefone/${resultado2}/${global.apiToken}`)
    if (xx.Nome != undefined) {
-    consulta = `═════════════════════
-🕵️  CONSULTA REALIZADA  🕵️
-═════════════════════
-            
- INFORMAÇÕES:
-
-• *NOME:* ${xx.Nome}
-• *CPF:* ${xx.CpfCnpj} 
-
- ENDEREÇO:
-
- • *ESTADO:* ${xx.Estado}
- • *CIDADE:* ${xx.Cidade}
- • *BAIRRO:* ${xx.Bairro}
- • *COMPLEMENTO:* ${xx.Complemento}
- • *RUA:* ${xx.Logradouro}
- • *NUMERO:* ${xx.Número}
-
-━━━━━━━━━━━━━━━━━━`
+    consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES:\n\n• *NOME:* ${xx.Nome}\n• *CPF:* ${xx.CpfCnpj} \n\n ENDEREÇO:\n\n • *ESTADO:* ${xx.Estado}\n • *CIDADE:* ${xx.Cidade}\n • *BAIRRO:* ${xx.Bairro}\n • *COMPLEMENTO:* ${xx.Complemento}\n • *RUA:* ${xx.Logradouro}\n • *NUMERO:* ${xx.Número}\n\n━━━━━━━━━━━━━━━━━━`
 m.reply(consulta)
   
 } else {
@@ -1356,9 +1243,7 @@ case 'ping': case 'botstatus': case 'statusbot': {
     let latensi = speed() - timestamp
     neww = performance.now()
     oldd = performance.now()
-    respon = `💻 Info do Bot
-
-🚀 Tempo de resposta ${latensi.toFixed(4)} _Segundos_ \n\n⏳ Tempo ativo : ${runtime(process.uptime())}`.trim()
+    respon = `💻 Info do Bot\n\n🚀 Tempo de resposta ${latensi.toFixed(4)} _Segundos_ \n\n⏳ Tempo ativo : ${runtime(process.uptime())}`.trim()
     m.reply(respon)
 }
 break

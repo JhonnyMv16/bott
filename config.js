@@ -40,9 +40,7 @@ global.APIKeys = {
 }
 
 // Other
-global.owner = ['559491423691','559491423691','559491423691','559491423691','559491423691']
-global.sessionName = 'batSession'
-global.premium = ['559491423691']
+global.premium = ['559491423691'] // não é o sistema de premium
 
 
 global.sp = '⭔'
