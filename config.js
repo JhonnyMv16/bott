@@ -19,12 +19,10 @@ global.prefa = ['/']
 
 // Edite apenas o nescessário:
 // Edições na desc da fig:
-global.packname = 'nome da fig'
-global.author = 'autor na desc da fig'
+global.packname = 'Karma buscas'
+global.author = '\n\n\n\n\n\n\n\n\n'
 
 // Api que eu te mandei (coloque com o https:// mas sem o / no final)
-// Forma correta: https://suApi.herokuapp.com
-// Forma incorreta: suApi.herokuapp.com/
 global.apidados = 'https://myapisecretkarma.herokuapp.com'; // Compre sua api com o markos: wa.me/559491423691
 global.apiToken = 'coloque seu token aqui'; // Compre seu token com o markos: wa.me/559491423691
 
@@ -39,6 +37,14 @@ global.APIKeys = {
 	'https://zenzapi.xyz': 'Your Key',
 }
 
+// TABELA DE PREÇOS PARA PV
+global.precopv = `🟢 07 DIAS = R$ 10,00
+🟢 30 DIAS = R$ 20,00`
+
+// TABELA DE PREÇOS PARA GRUPO
+global.precogrupo = `🟢 07 DIAS = R$ 20,00
+🟢 15 DIAS = R$ 30,00
+🟢 30 DIAS = R$ 45,00`
 // Other
 global.premium = ['559491423691'] // não é o sistema de premium
 
@@ -50,7 +56,7 @@ global.mess = {
     botAdmin: 'Bot deve ser administrador primeiro!',
     owner: 'Recursos especiais do proprietário do bot',
     group: 'Recurso usado apenas para grupos!',
-    private: 'Recursos usados ​​apenas para bate-papo privado!',
+    private: 'Recursos usados apenas para bate-papo privado!',
     bot: 'Recursos especiais do usuário do número do bot',
     wait: 'Aguarde...',
     endLimit: 'Seu limite diário expirou, o limite será redefinido a cada 12 horas',
