@@ -311,7 +311,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
             
                     // menu2 de comandos extras
                             case 'menu2':
-                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /planos\n*┃ •* /afk\n*┃ •* /id\n*┃ •* /wame\n*┃ •* /chatid\n*┃ •* /ping\n*┃ •* /delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /antilink \n*┃ •* /grupo \n*┃ •* /Hide \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /tel (1, 2 e 3)\n*┃ •* /placa\n*┃ •* /cnpj\n*┃ •* /nome\n*┃ •* /site\n*┃ •* /cpf (1, 2, 3 e 4)\n*┃ •* /cep\n*┃ •* /bin\n*┃ •* /ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /privado\n*┃ •* /publico\n*┃ •* /join\n*┃ •* /unblock\n┗━━━━━━━━━━━━━━┛')
+                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /planos\n*┃ •* /afk\n*┃ •* /listchat\n*┃ •* /listgp\n\n*┃ •* /check*┃ •* /id\n*┃ •* /wame\n*┃ •* /chatid\n*┃ •* /ping\n*┃ •* /delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /online \n*┃ •* /leave \n*┃ •* /antilink \n*┃ •* /grupo \n*┃ •* /anunciar \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /tel (1, 2 e 3)\n*┃ •* /placa\n*┃ •* /cnpj\n*┃ •* /nome\n*┃ •* /site\n*┃ •* /cpf (1, 2, 3 e 4)\n*┃ •* /cep\n*┃ •* /bin\n*┃ •* /ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /privado\n*┃ •* /send\n*┃ •* /sendgp\n*┃ •* /publico\n*┃ •* /join\n*┃ •* /unblock\n┗━━━━━━━━━━━━━━┛')
                             break
                         
                             case 'donate': case 'contratar': case 'criador': case 'owner': case '1234aaaaadonate': {
@@ -343,7 +343,7 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
                 bat.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
                 }
                 break
-                case 'hide': {
+                case 'hide': case 'anunciar':{
                     if (!m.isGroup) throw mess.group
                     if (!isBotAdmins) throw mess.botAdmin
                     if (!isAdmins) throw mess.admin
@@ -503,7 +503,7 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
             break
 
 
-            case 'bcgc': case 'bcgroup': {
+            case 'bcgc': case 'sendgp': {
                 if (!isCreator) throw mess.owner
                 if (!text) throw `Cadê o testo? kkkk\n\nExemplo : ${prefix + command} adm está com fimose ainda😢`
                 let getGroups = await bat.groupFetchAllParticipating()
@@ -590,7 +590,7 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
                     m.reply(`Sim, você está na lista de usuários premium!`)
                 }
                 break
-                case 'onlines': case 'liston': {
+                case 'onlines': case 'liston': case 'online': {
                     let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
                     let online = [...Object.keys(store.presences[id]), botNumber]
                     bat.sendText(m.chat, 'Lista de Onlines:\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
