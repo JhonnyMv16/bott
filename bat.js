@@ -33,11 +33,8 @@ const { testElement } = require('domutils')
 // CARREGANDO DATABESES
 
 // SISTEMA PREMIUM
-let prem2 = [`559491423691@s.whatsapp.net`, `coloque o numero @s.whatsapp.net`, `nao tire o @s.whatsapp.net`, `adicione quantos vips vc quiser@s.whatsapp.net`]
-// O NÚMERO DA PESSOA DEVE FICAR TODO JUNTO ANTES DO "@s.whatsapp.net"
-
-var Puxada = true
-
+let prem2 = [`554488888888`,`554488888888`,`554488888888`]
+// BASTA IR ADICIONANDO OS NÚMEROS 
 
 // ALGUMAS DEFINIÇÕES
 module.exports = bat = async (bat, m, chatUpdate, store) => {
@@ -47,7 +44,7 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
         var prefix = global.prefa;
         const isCmd = body.startsWith(prefix)
         const command = isCmd ? body.slice(1).trim().split(/ +/).shift().toLocaleLowerCase() : null
-        //const isCmd = body.startsWith(prefix) 
+        //const isCmd = body.startsWith(prefix) // COMANDOS SEM PREFIX
         //const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase() // COMANDOS SEM PREFIX
         const args = body.trim().split(/ +/).slice(1)
         const pushname = m.pushName || "Sem nome"
@@ -58,8 +55,7 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
 	    const isMedia = /image|video|sticker|audio/.test(mime)
-    	const isPremium2 = prem2.includes(m.sender)
-	    const premm2 = isPremium2 ? 's' : 'n' 
+	   
 	
         // DEFINIÇÕES PARA GRUPO
         const groupMetadata = m.isGroup ? await bat.groupMetadata(m.chat).catch(e => {}) : ''
@@ -70,6 +66,8 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
     	const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
+        const isPremium2 = isCreator || prem2.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
+	    const premm2 = isPremium2 ? 's' : 'n' 
 	
 	
 	try {
@@ -219,7 +217,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
 
 
             case 'sticker': case 's': case 'f': case 'sgif': {
-                if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
+               // if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
                 if (!quoted) throw `Marque um video ou imagem com o comando ${prefix + command}`
                 m.reply(mess.wait)
                         if (/image/.test(mime)) {
@@ -236,9 +234,29 @@ No decorrer ${clockString(new Date - user.afkTime)}
                     }
                 }
                 break
-            
+              case 'renomear': {
+               if (!isCreator) throw mess.owner
+		      //if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+               if (!text) throw `Examplo de uso : ${prefix + command} packname|author`
+          global.packname = text.split("|")[0]
+          global.author = text.split("|")[1]
+          m.reply(`Descrição foi alterada com sucesso para\n\n⭔ Packname : ${global.packname}\n⭔ Autor : ${global.author}`)
+            }
+            break
+            case 'setplano': {
+                if (!isCreator) throw mess.owner
+                //if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+                if (!text) throw `Examplo de uso : ${prefix + command} 🟢 07 DIAS = R$ 10,00
+🟢 30 DIAS = R$ 20,00 |🟢 07 DIAS = R$ 20,00
+🟢 15 DIAS = R$ 30,00
+🟢 30 DIAS = R$ 45,00`
+           global.precopv = text.split("|")[0]
+           global.precogrupo = text.split("|")[1]
+           m.reply(`🛠 Descrição de preços foi alterada com sucesso:\n\n👤 Para privados : \n${global.precopv}\n👥 Para grupos : \n${global.precogrupo}`)
+             }
+             break
             case 'play': case 'ytplay': {
-                if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
+                //if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
                 if (!text) throw `Example : ${prefix + command} pablo vitar seu amor me pegou`
                 let yts = require("yt-search")
                 let search = await yts(text)
@@ -293,7 +311,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
             
                     // menu2 de comandos extras
                             case 'menu2':
-                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /planos\n*┃ •* /ping\n*┃ •* /delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /antilink \n*┃ •* /grupo \n*┃ •* /Hide \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /tel (1, 2 e 3)\n*┃ •* /placa\n*┃ •* /cnpj\n*┃ •* /nome\n*┃ •* /site\n*┃ •* /cpf (1, 2, 3 e 4)\n*┃ •* /cep\n*┃ •* /bin\n*┃ •* /ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /join\n*┃ •* /unblock\n┗━━━━━━━━━━━━━━┛')
+                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /planos\n*┃ •* /afk\n*┃ •* /id\n*┃ •* /wame\n*┃ •* /chatid\n*┃ •* /ping\n*┃ •* /delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /antilink \n*┃ •* /grupo \n*┃ •* /Hide \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /tel (1, 2 e 3)\n*┃ •* /placa\n*┃ •* /cnpj\n*┃ •* /nome\n*┃ •* /site\n*┃ •* /cpf (1, 2, 3 e 4)\n*┃ •* /cep\n*┃ •* /bin\n*┃ •* /ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /privado\n*┃ •* /publico\n*┃ •* /join\n*┃ •* /unblock\n┗━━━━━━━━━━━━━━┛')
                             break
                         
                             case 'donate': case 'contratar': case 'criador': case 'owner': case '1234aaaaadonate': {
@@ -304,7 +322,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
                                 let user = global.db.data.users[m.sender]
                                 user.afkTime = + new Date
                                 user.afkReason = text
-                                m.reply(`${m.pushName} Esta em modo afk, ${text ? ': ' + text : ''}`)
+                                m.reply(`${m.pushName} Entrou em modo afk${text ? ': ' + text : ''}`)
                             }
                             break	
                 
@@ -669,14 +687,11 @@ break
 
 👤 PLANOS  INDIVIDUAIS
 
-🟢 07 DIAS = R$ 10,00
-🟢 30 DIAS = R$ 20,00
+${global.precopv}
 
 👥 PLANOS PARA GRUPOS
 
-🟢 07 DIAS = R$ 20,00
-🟢 15 DIAS = R$ 30,00
-🟢 30 DIAS = R$ 45,00
+${global.precogrupo}
 
 💰 FORMAS DE PAGAMENTO
 
@@ -790,10 +805,17 @@ m.reply(a + `\n• *Usuario:* ${pushname}
 
 ━━━━━━━━━━━━━━━━━━`);
                 break
-                    case 'site':
-                       if(args.length < 1) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗦𝗜𝗧𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta a url de um SITE, obtém dados do site, como qual \né o ip, ip reverso, provedor, país, estado, cidade e as\ncoordenadas de onde ele está localizado.\n\nFormato:\nhttp://google.com\nou\ngoogle.com\n\n/site google.com\n\n━━━━━━━━━━━━━━━━━━━━━');
-                     m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕`)
-                hehe = await fetchJson(`http://ip-api.com/json/${q}`)
+
+
+            
+                case 'site':
+                if(args.length < 1) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗦𝗜𝗧𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta a url de um SITE, obtém dados do site, como qual \né o ip, ip reverso, provedor, país, estado, cidade e as\ncoordenadas de onde ele está localizado.\n\nFormato:\nhttp://google.com\nou\ngoogle.com\n\n/site google.com\n\n━━━━━━━━━━━━━━━━━━━━━');
+                var query = q
+                .split('http://').join('')
+                .split('https://').join('')
+                .split(' ').join('');
+                m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕`)
+                hehe = await fetchJson(`http://ip-api.com/json/${query}`)
  
         if (hehe.country != undefined) {
     consulta = `═════════════════════
@@ -949,7 +971,7 @@ m.reply(consulta)
 
                       case 'cpf':
                       case 'cpf1':
-    if(!Puxada) throw (`⚠ - Puxadas foram desativadas pelo meu dono ou estou em manutenção.`)
+    // if(!Puxada) throw (`⚠ - Puxadas foram desativadas pelo meu dono ou estou em manutenção.`)
     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟭\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf1 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
@@ -990,7 +1012,6 @@ m.reply(consulta)
 
 
 case 'cpf2':
-    if(!Puxada) throw (`⚠ - Puxadas foram desativadas pelo meu dono ou estou em manutenção.`)
     if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟮\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de CPF, retorna os dados do portador. Incluindo dados Tipo 1 + número de RG, nome do pai e local de nascimento.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf2 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
@@ -1012,7 +1033,6 @@ m.reply(consulta)
   break
 
     case 'cpf3':
-    
     if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟯\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf3 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
@@ -1045,9 +1065,8 @@ m.reply(consulta)
 			
 			
     case 'cpf4':
-    
     if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
-    if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟯\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf3 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
+    if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf4 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('.').join('')
     .split('-').join('')
@@ -1142,11 +1161,10 @@ m.reply(consulta)
 
                 break
 
-                case 'tel2':
-                 
-                if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
-                if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/tel2 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
-                var query = text
+    case 'tel2':
+    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/tel2 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
+    var query = text
     .split('+').join('')
     .split('-').join('')
     .split(' ').join('')
@@ -1178,12 +1196,10 @@ m.reply(consulta)
 }
                 break
 
-                case 'tel3':
-                    case 'telefone3':
-                     
-                    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
-                    if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\nmarque uma mensagem ou marque uma pessoa\n\n/tel3 @usuáro\n\n━━━━━━━━━━━━━━━━━━━━━`)
-                    let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+''
+    case 'tel3': case 'telefone3':
+    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\nmarque uma mensagem ou marque uma pessoa\n\n/tel3 @usuáro\n\n━━━━━━━━━━━━━━━━━━━━━`)
+    let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+''
     var resultado = users.replace("@s.whatsapp.net", "");
     var resultado2 = resultado.replace(/(\d{2})/, "");
     if(resultado2.length == 10) {
