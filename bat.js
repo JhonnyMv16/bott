@@ -857,7 +857,7 @@ await bat.sendMessage(m.chat, { location: { degreesLatitude: hehe.lat, degreesLo
     if(query.length < 6) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗜𝗣\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta o número de IP, obtém dados do IP, como qual é o provedor, ip reverso, país, estado, cidade e as coordenadas de onde ele está localizado.\n\nFormato:\n204.152.203.157\n\n/ip 204.152.203.157\n\n━━━━━━━━━━━━━━━━━━━━━');
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗜𝗣\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta o número de IP, obtém dados do IP, como qual é o provedor, ip reverso, país, estado, cidade e as coordenadas de onde ele está localizado.\n\nFormato:\n204.152.203.157\n\n/ip 204.152.203.157\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
-                hehe = await fetchJson(`http://ip-api.com/json/${query}`)
+                hehe = await fetchJson(`http://ip-api.com/json/${text}`)
  
         if (hehe.country != undefined) {
     consulta = `═════════════════════
