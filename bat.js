@@ -31,9 +31,8 @@ const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, 
 const { testElement } = require('domutils')
 
 // CARREGANDO DATABESES
-
 // SISTEMA PREMIUM
-let prem2 = [`554488888888`,`554488888888`,`554488888888`]
+let prem2 = [`559491423691`, `556599081355`, `556198415661`, `553288987903`, `556499096509`]
 // BASTA IR ADICIONANDO OS NÚMEROS 
 
 // ALGUMAS DEFINIÇÕES
@@ -56,6 +55,8 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
         const mime = (quoted.msg || quoted).mimetype || ''
 	    const isMedia = /image|video|sticker|audio/.test(mime)
 	   
+        
+        const antifake = [`120363022980336151@g.us`]
 	
         // DEFINIÇÕES PARA GRUPO
         const groupMetadata = m.isGroup ? await bat.groupMetadata(m.chat).catch(e => {}) : ''
@@ -68,7 +69,36 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
         const isPremium2 = isCreator || prem2.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 	    const premm2 = isPremium2 ? 's' : 'n' 
-	
+        const isAntiFake = m.isGroup ? antifake.includes(m.chat) : true 
+        const semfake = isAntiFake ? 's' : 'n' 
+         
+        //Antifake:
+
+  
+    bat.ev.on('group-participants.update', async (anu) => {
+        if(antifake.includes(anu.id)) {
+            if (semfake != 'n') {
+                const mdata = await bat.groupMetadata(anu.id)
+                        if (anu.action == 'add'){
+                          //  m.reply(` ⛹️⛹️ Números estrangeiros não sao Permitidos neste grupo, consulte um Administrador 👋🏌️`)
+                            num = anu.participants[0]
+                            if(!num.split('@')[0].startsWith(55)) {
+                               // isa.sendMessage(mdata.id, ' ⛹️⛹️numeros estrangeiros não sao Permitidos neste grupo, consulte um Administrador👋🏌️', MessageType.text)
+                                setTimeout(async function () {
+    
+                                     bat.groupParticipantsUpdate(mdata.id, [num], 'remove')
+                                   
+                                }, 1000)
+                            }
+                         
+                        } else {
+                            console.log(`Possivel numero fake detectado - antifake off`)
+                        }
+                    }
+            
+        }
+    })
+    
 	
 	try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -92,7 +122,7 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
                 if (!('antilink' in chats)) chats.antilink = false
             } else global.db.data.chats[m.chat] = {
                 mute: false,
-                antilink: false,
+                antilink: true,
             }
 		
 	    let setting = global.db.data.settings[botNumber]
@@ -125,13 +155,13 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
             fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
         }, 60 * 1000)
 
-	// RESETA O LIMITE A CADA 12 HORAS
+	// RESETA O LIMITE A CADA 2 SEGUDOS PARA EVITAR FLOOD
         let cron = require('node-cron')
-        cron.schedule('00 12 * * *', () => {
+        cron.schedule('0-59/2 * * * * *', () => {
             let user = Object.keys(global.db.data.users)
-            let limitUser = isPremium ? global.limitawal.premium : global.limitawal.free
+            let limitUser = isPremium2 ? global.limitawal.premium : global.limitawal.free
             for (let jid of user) global.db.data.users[jid].limit = limitUser
-            console.log('Limite resetado')
+            //console.log('Limite resetado')
         }, {
             scheduled: true,
             timezone: "America/Sao_Paulo"
@@ -146,19 +176,23 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
 		setting.status = new Date() * 1
 	    }
 	}
+
+ 
+
 	    
 	  // ANTI LINK
       if (db.data.chats[m.chat].antilink) {
         if (budy.match(`chat.whatsapp.com`)) {
-        m.reply(`「 ANTI LINK 」\n\nUm novo link foi detectado!`)
-        if (!isBotAdmins) return m.reply(`não sou admin rlx T_T`)
+        //m.reply(`「 ANTI LINK 」\n\nUm novo link foi detectado!`)
+        if (!isBotAdmins) return //m.reply(`não sou admin rlx T_T`)
         let gclink = (`https://chat.whatsapp.com/`+await bat.groupInviteCode(m.chat))
         let isLinkThisGc = new RegExp(gclink, 'i')
         let isgclink = isLinkThisGc.test(m.text)
-        if (isgclink) return m.reply(`「 ANTI LINK 」\n\nrlx vc enviou um link do grupo, por conta disto eu não irei te banir.`)
+        if (isgclink) return //m.reply(`「 ANTI LINK 」\n\nrlx vc enviou um link do grupo, por conta disto eu não irei te banir.`)
         if (isAdmins) return //m.reply(`você é um administrador`)
         if (isCreator) return //m.reply(`você é o dono do meu bot`)
         bat.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+        m.reply(`🏃‍♂️ Link de outro grupo detectado...`)
         }
         }
         
@@ -214,8 +248,17 @@ No decorrer ${clockString(new Date - user.afkTime)}
 	    
         switch(command) {
 
-
-
+            case 'attp':
+                try{ 
+                if (!text) return m.reply(`preciso do text krl`)
+                url = encodeURI(`https://api.xteam.xyz/attp?file&text=${text}`)
+                attp2 = await getBuffer(url)
+                bat.sendMessage(m.chat, {sticker: attp2}, {quoted: m}, { packname: global.packname, author: global.author })
+                } catch(e) {
+                console.log(e)
+                m.reply('Deu erro, tente novamente.')
+                }
+                break
             case 'sticker': case 's': case 'f': case 'sgif': {
                // if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
                 if (!quoted) throw `Marque um video ou imagem com o comando ${prefix + command}`
@@ -236,16 +279,21 @@ No decorrer ${clockString(new Date - user.afkTime)}
                 break
               case 'renomear': {
                if (!isCreator) throw mess.owner
-		      //if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+		      // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                if (!text) throw `Examplo de uso : ${prefix + command} packname|author`
           global.packname = text.split("|")[0]
           global.author = text.split("|")[1]
           m.reply(`Descrição foi alterada com sucesso para\n\n⭔ Packname : ${global.packname}\n⭔ Autor : ${global.author}`)
             }
             break
+
             case 'setplano': {
                 if (!isCreator) throw mess.owner
-                //if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+                // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                 if (!text) throw `Examplo de uso : ${prefix + command} 🟢 07 DIAS = R$ 10,00
 🟢 30 DIAS = R$ 20,00 |🟢 07 DIAS = R$ 20,00
 🟢 15 DIAS = R$ 30,00
@@ -255,6 +303,19 @@ No decorrer ${clockString(new Date - user.afkTime)}
            m.reply(`🛠 Descrição de preços foi alterada com sucesso:\n\n👤 Para privados : \n${global.precopv}\n👥 Para grupos : \n${global.precogrupo}`)
              }
              break
+		case 'atualizar': {
+                if (!isPremium) throw mess.owner
+                // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
+                if (!text) throw `Examplo de uso : ${prefix + command} sua tabela`
+           global.tabela = text
+           m.reply(`tabela atualizada digite ${prefix}tabela`)
+             }
+             break
+		case 'tabela':
+		m.reply(global.tabela)
+		break
             case 'play': case 'ytplay': {
                 //if (!m.isGroup) throw `esse tipo de comando é exclusivo do grupo iris:\n\nhttps://chat.whatsapp.com/DUP9VTCuRin2NHFjYqYbZN`
                 if (!text) throw `Example : ${prefix + command} pablo vitar seu amor me pegou`
@@ -311,11 +372,11 @@ No decorrer ${clockString(new Date - user.afkTime)}
             
                     // menu2 de comandos extras
                             case 'menu2':
-                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /Planos\n*┃ •* /Afk\n*┃ •* /Listchat\n*┃ •* /Listgp\n*┃ •* /Check\n*┃ •* /Id\n*┃ •* /Wame\n*┃ •* /Chatid\n*┃ •* /Ping\n*┃ •* /Delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /Online \n*┃ •* /Leave \n*┃ •* /Antilink \n*┃ •* /Grupo \n*┃ •* /Anunciar \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /Demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /Tel (1, 2 e 3)\n*┃ •* /Placa\n*┃ •* /Cnpj\n*┃ •* /Nome\n*┃ •* /Site\n*┃ •* /Cpf (1, 2, 3 e 4)\n*┃ •* /Cep\n*┃ •* /Bin\n*┃ •* /Ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /Privado\n*┃ •* /Send\n*┃ •* /Sendgp\n*┃ •* /Publico\n*┃ •* /Join\n*┃ •* /Unblock\n┗━━━━━━━━━━━━━━┛')
+                            m.reply('┏━「🚀 *TODOS*」━┓\n*┃ •* /Perguntar\n*┃ •* /Planos\n*┃ •* /Afk\n*┃ •* /Listchat\n*┃ •* /Listgp\n*┃ •* /Check\n*┃ •* /Id\n*┃ •* /Wame\n*┃ •* /Chatid\n*┃ •* /Ping\n*┃ •* /Delete\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「💬 *GRUPOS*」━┓\n*┃ •* /Marcar \n*┃ •* /Online \n*┃ •* /Leave \n*┃ •* /Antilink \n*┃ •* /Grupo \n*┃ •* /Anunciar \n*┃ •* /Ban \n*┃ •* /TempBan \n*┃ •* /Add \n*┃ •* /Promote \n*┃ •* /Demote \n┗━━━━━━━━━━━━━━┛\n\n\n┏━「🔎 *CONSULTAS*」━┓\n*┃ •* /Tel (1, 2 e 3)\n*┃ •* /Placa\n*┃ •* /Cnpj\n*┃ •* /Nome\n*┃ •* /Site\n*┃ •* /Cpf (1, 2, 3 e 4)\n*┃ •* /Cep\n*┃ •* /Bin\n*┃ •* /Ip\n┗━━━━━━━━━━━━━━┛\n\n\n┏━「👤 *DONO*」━┓\n*┃ •* /Privado\n*┃ •* /Send\n*┃ •* /Sendgp\n*┃ •* /Publico\n*┃ •* /Join\n*┃ •* /Unblock\n┗━━━━━━━━━━━━━━┛')
                             break
                         
                             case 'donate': case 'contratar': case 'criador': case 'owner': case '1234aaaaadonate': {
-                                bat.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/39f83106b3cfe2125c39a.jpg' }, caption: `🔆 - *Olá ${m.pushName}*,\nDesde já obriado por querer me contratar!\n\n✅ - *Para contratar um dos meus planos fale com meu dono:*\n\nhttps://wa.me/559491423691` }, { quoted: m })
+                                bat.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/39f83106b3cfe2125c39a.jpg' }, caption: `🔆 - *Olá ${m.pushName}*,\nDesde já obriado por querer me contratar!\n\n✅ - *Para contratar um dos meus planos fale com meu dono:*\n\nhttps://wa.me/${global.owner[0]}` }, { quoted: m })
                             }
                             break
                             case 'afk': {
@@ -414,7 +475,48 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
             break
 			
 	
-
+            case 'antifake':   
+            if (!m.isGroup) throw mess.group
+                if (!isBotAdmins) throw mess.botAdmin
+                if (!isAdmins) throw mess.admin
+                if (args.length < 1) return reply(`Use assim:\n${prefix}antifake on para ativar\n${prefix}antifake off para desativar`)
+            if ((args[0]) === 'on') {
+            if (isAntiFake) return reply('Anti Fake está ativo')
+            antifake.push(m.chat)
+            fs.writeFileSync('./lib/antifake.json', JSON.stringify(antifake))
+            ativado = `「 𝗠 𝗢 𝗗 𝗢  𝗔 𝗡 𝗧 𝗜 𝗙 𝗔 𝗞 𝗘 」\n\nEstado: *Ativo*\nGrupo: *${groupMetadata.subject}*\nOrdens do: ${pushname}`
+            const buttonsvv222x = [
+               {buttonId: '/antifake off', buttonText: {displayText: 'Desativar AntiFake'}, type: 1}
+               //{buttonId: 'id2', buttonText: {displayText: 'Button 2'}, type: 1}
+             ]
+             const buttonMessagef = {
+                 contentText: ativado,
+                 footerText: '~Modo Anti Fake',
+                 buttons: buttonsvv222x,
+                 headerType: 1
+             }
+             bat.sendMessage(m.chat, buttonMessagef)
+            } else if ((args[0]) === 'off') {
+            if (!isAntiFake) return reply('Antifake foi desligado antes')
+            antifake.splice(m.chat, 1)
+            fs.writeFileSync('./lib/antifake.json', JSON.stringify(antifake))
+            desativado = `「 𝗠 𝗢 𝗗 𝗢  𝗔 𝗡 𝗧 𝗜 𝗙 𝗔 𝗞 𝗘 」\n\nEstado: *Desativado*\nGrupo: *${groupMetadata.subject}*\nOrdens do: ${pushname}`
+           
+            const buttonsvvxx2 = [
+               {buttonId: '/antifake on', buttonText: {displayText: 'Ativar AntiFake'}, type: 1}
+               //{buttonId: 'id2', buttonText: {displayText: 'Button 2'}, type: 1}
+             ]
+             const buttonMessagef = {
+                 contentText: desativado,
+                 footerText: '~Modo Anti Fake',
+                 buttons: buttonsvvxx2,
+                 headerType: 1
+             }
+             bat.sendMessage(m.chat, buttonMessagef)
+            } else {
+            m.reply('On para habilitar, Off para desabilitar')
+            }
+            break
             case 'antilink': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
@@ -711,7 +813,7 @@ ${global.precogrupo}
        case 'placa':
     case 'plac':
      
-    if(!isPremium2) throw ("👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar")
+    if(!isPremium2 && !m.isGroup) throw ("👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar")
     if(!text) throw (`Digite uma placa. | Exemplo: /placa JYE9708`)
     var query = text
     if(query.length < 7 || query.length > 11) return m.reply('ERRO\nA placa deve conter 7 dígitos!\nUso: /placa JYE9708');
@@ -721,7 +823,7 @@ if (xx.Nome != undefined) {
 
 
 
-retorno = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n• PLACA: ${xx.Placa}\n• SITUAÇÃO: ${xx.Situação}\n\n• MARCA: ${xx.MarcaModelo}\n• COR: ${xx.Cor}\n• DATA DE FABRICAÇÃO: ${xx.AnoFabricação}\n\n• MUNICIPIO: ${xx.Cor}\n• ESTADO: ${xx.Cor}\n• CHASSI: ${xx.Chassi}\n\n• RENAVAM: ${xx.Renavam}\n• UF FATURADO: ${xx.UfFaturado}\n\n• TIPO VEICULO: ${xx.TipoVeiculo}\n• ESPECIE: ${xx.Especie}\n• CATEGORIA: ${xx.Categoria}\n• COMBUSTIVEL: ${xx.Combustivel}\n\n• POTENCIA: ${xx.Potencia}\n• CILINDRADAS: ${xx.Cilindradas}\n• NACIONALIDADE: ${xx.Nacionalidade}\n• CAPACIDADE MAXIMA: ${xx.QuantidadeDePassageiros}\n• QUANTIDADE EIXOS: ${xx.QuantidadeEixos}\n\n• ATUALIZAÇÃO: ${xx.AtualizaçãoVeiculo}\n• ROUBO/FURTO: ${xx.RouboFurto}\n• REMARCAÇÃO CHASSI: ${xx.RemarcaçãoChassi}\n\n• LICENCIAMENTO: ${xx.Licenciamento}\n• EMISSÃO CRV: ${xx.EmissãoUltimoCrv}\n\n• NOME: ${xx.Nome}\n• CPF/CNPJ: ${xx.CpfCnpj}\n\n• Usuario: ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
+retorno = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n• PLACA: ${xx.Placa}\n• SITUAÇÃO: ${xx.Situação}\n• RESTRIÇÃO 1: ${xx.Restrição1}\n• RESTRIÇÃO 2: ${xx.Restrição2}\n• RESTRIÇÃO 3: ${xx.Restrição3}\n• RESTRIÇÃO 4: ${xx.Restrição4}\n\n• MARCA: ${xx.MarcaModelo}\n• COR: ${xx.Cor}\n• DATA DE FABRICAÇÃO: ${xx.AnoFabricação}\n• DATA DO MODELO: ${xx.AnoModelo}\n\n• MUNICIPIO: ${xx.Municipio}\n• ESTADO: ${xx.Estado}\n• CHASSI: ${xx.Chassi}\n\n• RENAVAM: ${xx.Renavam}\n• UF FATURADO: ${xx.UfFaturado}\n\n• TIPO VEICULO: ${xx.TipoVeiculo}\n• ESPECIE: ${xx.Especie}\n• CATEGORIA: ${xx.Categoria}\n• COMBUSTIVEL: ${xx.Combustivel}\n\n• POTENCIA: ${xx.Potencia}\n• CILINDRADAS: ${xx.Cilindradas}\n• NACIONALIDADE: ${xx.Nacionalidade}\n• CAPACIDADE MAXIMA: ${xx.QuantidadeDePassageiros}\n• QUANTIDADE EIXOS: ${xx.QuantidadeEixos}\n\n• ATUALIZAÇÃO: ${xx.AtualizaçãoVeiculo}\n• ROUBO/FURTO: ${xx.RouboFurto}\n• REMARCAÇÃO CHASSI: ${xx.RemarcaçãoChassi}\n\n• LICENCIAMENTO: ${xx.Licenciamento}\n• EMISSÃO CRV: ${xx.EmissãoUltimoCrv}\n\n• NOME: ${xx.Nome}\n• CPF/CNPJ: ${xx.CpfCnpj}\n\n• Usuario: ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
 
 m.reply(retorno)
 
@@ -732,20 +834,16 @@ m.reply(`⚠️ PLACA NÃO ENCONTRADA!`)
 break
 case 'nome':
              
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(args.length < 1) return m.reply('✅ Para usar esse comando use /nome + o nome da pessoa.');
 		  
     m.reply(`Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`);
-    api = await axios.get(`https://apido.herokuapp.com/nome/${q}/${global.apiToken}`)
+    api = await fetchJson(`https://apitestekarma.herokuapp.com/nome/${q}/${global.apiToken}`)
 
     if (api.consulta != undefined) {
-retorno = `${api.consulta}
-
-*Usuario:* ${pushname}
-
-🔛 BY: KARMA BOT
-
-━━━━━━━━━━━━━━━━━━`
+retorno = api.consulta
     
 m.reply(retorno)
 } else {
@@ -754,7 +852,9 @@ m.reply(`MUITA GENTE COM ESSE NOME, TENTE USAR OUTRO MAIS FÁCIL!`)
 break
                     /*case 'nome':
                     
-   		            if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+   		             if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                     if(args.length < 1) return m.reply('✅ Para usar esse comando use /nome + o nome da pessoa.');
 		    m.reply(`Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`);
                     xx = await fetchJson(`${global.apidados}/nome/${text}/${global.apiToken}`)
@@ -784,6 +884,8 @@ para apagar esta consulta digite /d
 // O COMANDO DE CNPJ ESTÁ ASSIM POIS FIQUEI COM PREGUIÇA DE CODAR, CASO QUEIRA ME AJUDAR, CODA ELE E ME MANDA, IREI COLOCAR OS CRÉDITOS <3
 case 'cnpj':
     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) return m.reply (`por favor digite um cnpj`)
                 var query = text
                 .split('+').join('')
@@ -973,6 +1075,8 @@ m.reply(consulta)
                       case 'cpf1':
     // if(!Puxada) throw (`⚠ - Puxadas foram desativadas pelo meu dono ou estou em manutenção.`)
     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟭\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf1 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('.').join('')
@@ -1012,7 +1116,9 @@ m.reply(consulta)
 
 
 case 'cpf2':
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟮\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de CPF, retorna os dados do portador. Incluindo dados Tipo 1 + número de RG, nome do pai e local de nascimento.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf2 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('.').join('')
@@ -1033,7 +1139,9 @@ m.reply(consulta)
   break
 
     case 'cpf3':
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟯\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf3 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('.').join('')
@@ -1065,7 +1173,9 @@ m.reply(consulta)
 			
 			
     case 'cpf4':
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf4 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('.').join('')
@@ -1092,7 +1202,10 @@ m.reply(consulta)
 
     case 'tel':
     case 'telefone':
+    
     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('+').join('')
@@ -1110,13 +1223,13 @@ m.reply(consulta)
                 m.reply(`*Ei ${pushname} já estou consultando...*`)
                 xx = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)
  
-if (xx.Nome != undefined) {
+if (xx[0].Nome != undefined) {
     let buttons6 = [
         {buttonId: `${prefix}tel1 ${query}`, buttonText: {displayText: 'consulta comum 🚀'}, type: 1},
         {buttonId: `${prefix}tel2 ${query}`, buttonText: {displayText: 'consulta completa 👑'}, type: 1},
         ]
     let buttonMessage6 = {
-        text: `Ebaa ${pushname}, Este número foi encontrado 🥳\n\nNúmero: _~${text}~_\nNome da pessoa: _~${xx.Nome}~_`,
+        text: `Ebaa ${pushname}, Este número foi encontrado 🥳\n\nNúmero: _~${text}~_\nNome da pessoa: _~${xx[0].Nome}~_`,
         footer: 'escolha abaixo qual o tipo de consulta você deseja:',
         buttons: buttons6,
         headerType: 2
@@ -1129,9 +1242,11 @@ if (xx.Nome != undefined) {
 
                 break
 
-    case 'tel1':
-    case 'telefone1':
+case 'tel1':
+ case 'telefone1':
     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('+').join('')
@@ -1148,21 +1263,44 @@ if (xx.Nome != undefined) {
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                xx = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)
- 
-if (xx.Nome != undefined) {
-    consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES:\n\n• *NOME:* ${xx.Nome}\n• *CPF:* ${xx.CpfCnpj} \n\n ENDEREÇO:\n\n • *ESTADO:* ${xx.Estado}\n • *CIDADE:* ${xx.Cidade}\n • *BAIRRO:* ${xx.Bairro}\n • *COMPLEMENTO:* ${xx.Complemento}\n • *RUA:* ${xx.Logradouro}\n • *NUMERO:* ${xx.Número}\n\n\n • *Usuario:* ${pushname}\n\n 🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
+                cj = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)//.then(cj => {
+if (cj[1].Nome) throw ("mais de um esoltado foi encontrado")
+
+   if (cj[0].Nome != undefined) {
+   // if (cj[1].Nome) throw ("mais de um esoltado foi encontrado")
+    consulta = `═════════════════════
+🔍 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗗𝗘 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘
+═════════════════════
+    
+INFORMAÇÕES:
+    
+• TELEFONE: ${query}
+    
+• NOME: ${cj[0].Nome ? cj[0].Nome : "SEM INFORMAÇÕES"}
+• CPF: ${cj[0].CPF ? cj[0].CPF : "SEM INFORMAÇÕES"}
+
+• ENDEREÇO: ${cj[0].Endereco ? cj[0].Endereco : "SEM INFORMAÇÕES"}
+• NUMERO: ${cj[0].Numero ? cj[0].Numero : "SEM INFORMAÇÕES"}
+• COMPLEMENTO: ${cj[0].Complemento ? cj[0].Complemento : "SEM INFORMAÇÕES"}
+• BAIRRO: ${cj[0].Bairro ? cj[0].Bairro : "SEM INFORMAÇÕES"}
+• CEP: ${cj[0].CEP ? cj[0].CEP : "SEM INFORMAÇÕES"}
+
+• OPERADORA: ${cj[0].Operadora ? cj[0].Operadora : "SEM INFORMAÇÕES"}
+
+👤 Usuário: ${pushname}
+
+🔛 BY: Karma Buscas`
 m.reply(consulta)
-  
 } else {
     
     m.reply(`⚠️ TELEFONE NÃO ENCONTRADO!`)
 }
-
+   //)
                 break
-
     case 'tel2':
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/tel2 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
     var query = text
     .split('+').join('')
@@ -1180,9 +1318,9 @@ m.reply(consulta)
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
                 xx = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)
-                if(xx.CpfCnpj.length > 11) return m.reply('O cpf localizado neste númrto era maior que 11 logo n vou conseguir encontrar (suspeito q seja um cnpj)\n\nPara descobrirque empresa é essa digite: ${prefix}cnpj ${xx.CpfCnpj}');
-                if (xx.CpfCnpj != undefined) {
-                apii = await fetchJson(`https://apido.herokuapp.com/cpf2/${xx.CpfCnpj}/${global.apiToken}`)
+                if(xx[0].CPF.length > 11) return m.reply(`O cpf localizado neste númrto era maior que 11 logo n vou conseguir encontrar (suspeito q seja um cnpj)\n\nPara descobrirque empresa é essa digite: ${prefix}cnpj ${xx.CPF}`);
+                if (xx[0].CPF != undefined) {
+                apii = await fetchJson(`https://apido.herokuapp.com/cpf2/${xx[0].CPF}/${global.apiToken}`)
 
                   consulta = 
     consulta = `${apii.consulta}
@@ -1197,7 +1335,9 @@ m.reply(consulta)
                 break
 
     case 'tel3': case 'telefone3':
-    if(!isPremium2) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
+    db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\nmarque uma mensagem ou marque uma pessoa\n\n/tel3 @usuáro\n\n━━━━━━━━━━━━━━━━━━━━━`)
     let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+''
     var resultado = users.replace("@s.whatsapp.net", "");
@@ -1302,10 +1442,26 @@ break
                 //bat.relayMessage(template.message)
             }
             break*/
+
+            
+			case 'perguntar':
+                if(!q) throw (`digite um texto ou avaliação, exemplo:\n\n${prefix + command} como fazer sticker?`)
+                bat.sendMessage(`${global.owner[0]}@s.whatsapp.net`, {text: `📝 PERGUNTA DE:\nwa.me/${m.sender.split('@')[0]} - *${pushname}*\n\nMensagem: _*${q}*_\n\nPara responder digite:`}, m)
+    await sleep(80)
+    bat.sendMessage(`${global.owner[0]}@s.whatsapp.net`, {text: `!sendr ${m.sender.split('@')[0]}|Em resposta a sua pergunta:  _*${q}*_\n\n.`}, m)
+                m.reply(`✍ Você mandou esta mensagem para o suporte: _*${q}*_\n⏳ aguarde já já meu suporte irá te responder ~ou não~.`)
+                break
+case 'responder': case 'sendr':
+    if (!isCreator) throw 'comando exclusivo para meu dono'
+    if(!text) throw (`digite um texto para resposta, exemplo:\n\n${prefix + command} 5594988888888|olá`)
+    bat.sendMessage(`${text.split("|")[0]}` + '@s.whatsapp.net', {text: `✅ DE: _*${pushname}*_\n\nMensagem: ${text.split("|")[1]}`}, m)
+    m.reply(`Enviei ✅`)
+    break
+
             case 'start': case 'menu': case 'iniciar': case 'help':
 	const templateButtons = [
     {index: 1, urlButton: {displayText: '🔆 Meu grupo', url: 'https://chat.whatsapp.com/FeBFBymIjuj39NWD94i5Ob'}},
-    {index: 2, urlButton: {displayText: '👨‍💻 Meu criador', url: 'https://wa.me/559491423691'}},
+    {index: 2, urlButton: {displayText: '👨‍💻 Meu criador', url: `https://wa.me/${global.owner[0]}`}},
     //{index: 6, urlButton: {displayText: '📼 Canal do meu dono', url: 'https://www.youtube.com/MawyDev'}},
     {index: 3, quickReplyButton: {displayText: '🔎 BUSCAS', id: `${prefix}consultas`}},
     {index: 4, quickReplyButton: {displayText: '💰 PLANOS', id: `${prefix}planos`}},
@@ -1313,7 +1469,7 @@ break
 ]
 
 const templateMessage = {
-    text: `*MENU*\nOLÁ ${pushname}!!\nSOU UM BOT DE CONSULTAS!`,
+    text: `*MENU*\nOLÁ ${pushname}!!\nSOU UM BOT DE CONSULTAS!\n\nCaso queira tirar dúvidas com meu suporte digite:\n/perguntar`,
     footer: 'SELECIONE UMA OPÇÃO:',
     templateButtons: templateButtons
 }
