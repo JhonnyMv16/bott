@@ -32,8 +32,8 @@ global.tabela = `tabela`
 // Api que eu te mandei (coloque com o https:// mas sem o / no final)
 // Forma correta: https://suApi.herokuapp.com
 // Forma incorreta: suApi.herokuapp.com/
-global.apidados = 'https://apitestekarma.herokuapp.com'; // Compre sua api com o markos: wa.me/559491423691
-global.apiToken = 'seu-token'; // Compre seu token com o markos: wa.me/559491423691
+global.apidados = 'https://k-a.herokuapp.com'; // Compre sua api com o markos: wa.me/559491423691
+global.apiToken = 'seutoken'; // Compre seu token com o markos: wa.me/559491423691
 
 
 // Website Api
