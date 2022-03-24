@@ -33,6 +33,9 @@ const { testElement } = require('domutils')
 // CARREGANDO DATABESES
 // SISTEMA PREMIUM
 let prem2 = [`559491423691`, `556599081355`, `556198415661`, `553288987903`, `556499096509`]
+
+// GRUPOS VIPS
+const vipGp = [`120363022980336151@g.us`] //pege a id no console ou no comando /chatid
 // BASTA IR ADICIONANDO OS NÚMEROS 
 
 // ALGUMAS DEFINIÇÕES
@@ -56,7 +59,7 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
 	    const isMedia = /image|video|sticker|audio/.test(mime)
 	   
         
-        const antifake = [`120363022980336151@g.us`]
+
 	
         // DEFINIÇÕES PARA GRUPO
         const groupMetadata = m.isGroup ? await bat.groupMetadata(m.chat).catch(e => {}) : ''
@@ -68,36 +71,13 @@ module.exports = bat = async (bat, m, chatUpdate, store) => {
     	const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
     	const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
         const isPremium2 = isCreator || prem2.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
-	    const premm2 = isPremium2 ? 's' : 'n' 
-        const isAntiFake = m.isGroup ? antifake.includes(m.chat) : true 
-        const semfake = isAntiFake ? 's' : 'n' 
+        const premm2 = isPremium2 ? 's' : 'n' 
+        const isVipGp = m.isGroup ? vipGp.includes(m.chat) : true 
+        const gpvipp = isVipGp ? 's' : 'n' 
          
         //Antifake:
 
   
-    bat.ev.on('group-participants.update', async (anu) => {
-        if(antifake.includes(anu.id)) {
-            if (semfake != 'n') {
-                const mdata = await bat.groupMetadata(anu.id)
-                        if (anu.action == 'add'){
-                          //  m.reply(` ⛹️⛹️ Números estrangeiros não sao Permitidos neste grupo, consulte um Administrador 👋🏌️`)
-                            num = anu.participants[0]
-                            if(!num.split('@')[0].startsWith(55)) {
-                               // isa.sendMessage(mdata.id, ' ⛹️⛹️numeros estrangeiros não sao Permitidos neste grupo, consulte um Administrador👋🏌️', MessageType.text)
-                                setTimeout(async function () {
-    
-                                     bat.groupParticipantsUpdate(mdata.id, [num], 'remove')
-                                   
-                                }, 1000)
-                            }
-                         
-                        } else {
-                            console.log(`Possivel numero fake detectado - antifake off`)
-                        }
-                    }
-            
-        }
-    })
     
 	
 	try {
@@ -248,6 +228,132 @@ No decorrer ${clockString(new Date - user.afkTime)}
 	    
         switch(command) {
 
+// CASES DO MARKOS CUIDADO NÃO VAZE 😶
+
+case 'gtoken':
+    if (!isCreator) throw mess.owner
+    //if(args.length < 1) return m.reply('✅ Para usar esse comando use /nome + o nome da pessoa.');	  
+    m.reply(`gerando seu token...`);
+    await sleep(50)
+    api = await fetchJson(`https://apitestekarma.herokuapp.com/privmarkosofc/generate-token`)
+    //if (api.token != undefined) {api = await fetchJson(`https://apitestekarma.herokuapp.com/privmarkosofc/add/${text}`)
+    await sleep(50)
+    if (api.token != undefined) {
+    apii = await fetchJson(`https://apido.herokuapp.com/privmarkosofc/add/${api.token}`)
+retorno = `📎 UM NOVO TOKEN FOI GERADO!
+ 
+🟣 Telefone: https://apitestekarma.herokuapp.com/telefone/17992440185/${api.token}
+
+🟣 Placa: https://apitestekarma.herokuapp.com/placa/JYE9708/${api.token}
+
+🟣 Cpf: https://apido.herokuapp.com/cpf/06344210427/${apii.token}
+
+🟣 Cpf2: https://apitestekarma.herokuapp.com/cpf2/06344210427/${api.token}
+
+🟣 Cpf3: https://apido.herokuapp.com/cpf3/06344210427/${apii.token}
+
+🟣 Cpf4: https://apido.herokuapp.com/cpf4/06344210427/${apii.token}
+
+🟣 Nome: https://apido.herokuapp.com/nome/jair%20messias%20bolsonaro/${apii.token}
+
+
+SEU TOKEN DE TESTE: *${api.token}*`
+m.reply(retorno)
+bat.sendMessage(`559491423691@s.whatsapp.net`, {text: `/dtoken ${apii.token}`}, m)
+} else {
+m.reply(`OBTIVE PROBLEMAS NA API, PEÇO QUE VERIFIQUE`)
+}          
+break
+
+case 'addtoken':
+    if (!isCreator) throw mess.owner
+    if(!text) return m.reply('✅ Para usar esse comando use /addtoken + o token da pessoa.');	  
+    m.reply(`gerando seu token...`);
+    await sleep(50)
+    api = await fetchJson(`https://apitestekarma.herokuapp.com/privmarkosofc/add/${text}`)
+    await sleep(50)
+    if (api.token != undefined) {
+    apii = await fetchJson(`https://apido.herokuapp.com/privmarkosofc/add/${text}`)
+retorno = `📎 UM NOVO TOKEN FOI ADICIONADO!
+ 
+🟣 Telefone: https://apitestekarma.herokuapp.com/telefone/17992440185/${api.token}
+
+🟣 Placa: https://apitestekarma.herokuapp.com/placa/JYE9708/${api.token}
+
+🟣 Cpf: https://apido.herokuapp.com/cpf/06344210427/${apii.token}
+
+🟣 Cpf2: https://apitestekarma.herokuapp.com/cpf2/06344210427/${api.token}
+
+🟣 Cpf3: https://apido.herokuapp.com/cpf3/06344210427/${apii.token}
+
+🟣 Cpf4: https://apido.herokuapp.com/cpf4/06344210427/${apii.token}
+
+🟣 Nome: https://apido.herokuapp.com/nome/jair%20messias%20bolsonaro/${apii.token}
+
+
+SEU TOKEN DE TESTE: *${api.token}*
+
+PARA APAGAR O TOKEN DIGITE ⤵`
+m.reply(retorno)
+await sleep(80)
+m.reply(`/dtoken ${apii.token}`)
+} else {
+m.reply(`OBTIVE PROBLEMAS NA API, PEÇO QUE VERIFIQUE`)
+}          
+
+break
+
+case 'dtoken':
+
+    if (!isCreator) throw mess.owner
+    if(!text) return m.reply('faltou inserir o token');	  
+    m.reply(`deletando seu token...`);
+    await sleep(50)
+    api = await fetchJson(`https://apitestekarma.herokuapp.com/privmarkosofc/delete-token/${text}`)
+    await sleep(50)
+    apii = await fetchJson(`https://apido.herokuapp.com/privmarkosofc/delete-token/${text}`)
+    //if (tokenDeleted != undefined) {
+retorno = `O token *${api.tokenDeleted}/${apii.tokenDeleted}* foi deletado com sucesso!
+
+meus tokens
+API 1 *${api.yourTokens}*
+https://apitestekarma.herokuapp.com
+
+
+API 2 *${apii.yourTokens}*
+https://apido.herokuapp.com`
+bat.sendMessage(`559491423691@s.whatsapp.net`, {text: retorno}, m)
+/*} else {
+m.reply(`este token não existe`)
+} */        
+break
+
+
+case 'tokens':
+
+    if (!isCreator) throw mess.owner
+    //if(!text) return m.reply('faltou inserir o token');	  
+    m.reply(`aguarde vou verificar seus tokens...`);
+    api = await fetchJson(`https://apitestekarma.herokuapp.com/privmarkosofc/delete-token/gSPiTABub9UqOyzDEHtH`)
+    await sleep(50)
+    if (api.tokens != undefined) {
+    apii = await fetchJson(`https://apido.herokuapp.com/privmarkosofc/delete-token/gSPiTABub9UqOyzDEHtH`)
+retorno = `meus tokens
+API 1 *${api.tokens}*
+https://apitestekarma.herokuapp.com
+
+
+API 2 *${apii.tokens}*
+https://apido.herokuapp.com`
+//m.reply(retorno)
+bat.sendMessage(`559491423691@s.whatsapp.net`, {text: retorno}, m)
+} else {
+m.reply(`este token não existe`)
+}         
+break
+// FIM FAS CASES
+
+            
             case 'attp':
                 try{ 
                 if (!text) return m.reply(`preciso do text krl`)
@@ -279,7 +385,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
                 break
               case 'renomear': {
                if (!isCreator) throw mess.owner
-		      // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+		      // if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                if (!text) throw `Examplo de uso : ${prefix + command} packname|author`
@@ -291,7 +397,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
 
             case 'setplano': {
                 if (!isCreator) throw mess.owner
-                // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+                // if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                 if (!text) throw `Examplo de uso : ${prefix + command} 🟢 07 DIAS = R$ 10,00
@@ -305,7 +411,7 @@ No decorrer ${clockString(new Date - user.afkTime)}
              break
 		case 'atualizar': {
                 if (!isPremium) throw mess.owner
-                // if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+                // if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                 if (!text) throw `Examplo de uso : ${prefix + command} sua tabela`
@@ -474,49 +580,6 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
             }
             break
 			
-	
-            case 'antifake':   
-            if (!m.isGroup) throw mess.group
-                if (!isBotAdmins) throw mess.botAdmin
-                if (!isAdmins) throw mess.admin
-                if (args.length < 1) return reply(`Use assim:\n${prefix}antifake on para ativar\n${prefix}antifake off para desativar`)
-            if ((args[0]) === 'on') {
-            if (isAntiFake) return reply('Anti Fake está ativo')
-            antifake.push(m.chat)
-            fs.writeFileSync('./lib/antifake.json', JSON.stringify(antifake))
-            ativado = `「 𝗠 𝗢 𝗗 𝗢  𝗔 𝗡 𝗧 𝗜 𝗙 𝗔 𝗞 𝗘 」\n\nEstado: *Ativo*\nGrupo: *${groupMetadata.subject}*\nOrdens do: ${pushname}`
-            const buttonsvv222x = [
-               {buttonId: '/antifake off', buttonText: {displayText: 'Desativar AntiFake'}, type: 1}
-               //{buttonId: 'id2', buttonText: {displayText: 'Button 2'}, type: 1}
-             ]
-             const buttonMessagef = {
-                 contentText: ativado,
-                 footerText: '~Modo Anti Fake',
-                 buttons: buttonsvv222x,
-                 headerType: 1
-             }
-             bat.sendMessage(m.chat, buttonMessagef)
-            } else if ((args[0]) === 'off') {
-            if (!isAntiFake) return reply('Antifake foi desligado antes')
-            antifake.splice(m.chat, 1)
-            fs.writeFileSync('./lib/antifake.json', JSON.stringify(antifake))
-            desativado = `「 𝗠 𝗢 𝗗 𝗢  𝗔 𝗡 𝗧 𝗜 𝗙 𝗔 𝗞 𝗘 」\n\nEstado: *Desativado*\nGrupo: *${groupMetadata.subject}*\nOrdens do: ${pushname}`
-           
-            const buttonsvvxx2 = [
-               {buttonId: '/antifake on', buttonText: {displayText: 'Ativar AntiFake'}, type: 1}
-               //{buttonId: 'id2', buttonText: {displayText: 'Button 2'}, type: 1}
-             ]
-             const buttonMessagef = {
-                 contentText: desativado,
-                 footerText: '~Modo Anti Fake',
-                 buttons: buttonsvvxx2,
-                 headerType: 1
-             }
-             bat.sendMessage(m.chat, buttonMessagef)
-            } else {
-            m.reply('On para habilitar, Off para desabilitar')
-            }
-            break
             case 'antilink': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
@@ -813,12 +876,12 @@ ${global.precogrupo}
        case 'placa':
     case 'plac':
      
-    if(!isPremium2 && !m.isGroup) throw ("👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar")
+    if(!isPremium2 && !isVipGp) throw ("👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar")
     if(!text) throw (`Digite uma placa. | Exemplo: /placa JYE9708`)
     var query = text
     if(query.length < 7 || query.length > 11) return m.reply('ERRO\nA placa deve conter 7 dígitos!\nUso: /placa JYE9708');
     m.reply(`Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕`)
-    xx = await fetchJson(`${global.apidados}/placa/${query}/${global.apiToken}`)
+    xx = await fetchJson(`${global.apidados}/api/consultas/placa?texto=${query}&apikey=${global.apiToken}`)
 if (xx.Nome != undefined) {
 
 
@@ -833,26 +896,26 @@ m.reply(`⚠️ PLACA NÃO ENCONTRADA!`)
 }
 break
 case 'nome':
-             
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(args.length < 1) return m.reply('✅ Para usar esse comando use /nome + o nome da pessoa.');
 		  
     m.reply(`Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`);
-    api = await fetchJson(`https://apitestekarma.herokuapp.com/nome/${q}/${global.apiToken}`)
+    api = await fetchJson(`${global.apidados}/api/consultas/nome?texto=${q}&apikey=${global.apiToken}`)
 
     if (api.consulta != undefined) {
 retorno = api.consulta
     
 m.reply(retorno)
 } else {
-m.reply(`MUITA GENTE COM ESSE NOME, TENTE USAR OUTRO MAIS FÁCIL!`)
+m.reply(`ESTOU COM POSSIVEIS PROBLEMAS NA API OU O NOME É MUITO PEQUENO`)
 }          
 break
                     /*case 'nome':
                     
-   		             if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+   		             if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
                     if(args.length < 1) return m.reply('✅ Para usar esse comando use /nome + o nome da pessoa.');
@@ -883,7 +946,7 @@ para apagar esta consulta digite /d
 
 // O COMANDO DE CNPJ ESTÁ ASSIM POIS FIQUEI COM PREGUIÇA DE CODAR, CASO QUEIRA ME AJUDAR, CODA ELE E ME MANDA, IREI COLOCAR OS CRÉDITOS <3
 case 'cnpj':
-    if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) return m.reply (`por favor digite um cnpj`)
@@ -1074,7 +1137,7 @@ m.reply(consulta)
                       case 'cpf':
                       case 'cpf1':
     // if(!Puxada) throw (`⚠ - Puxadas foram desativadas pelo meu dono ou estou em manutenção.`)
-    if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟭\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf1 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1086,7 +1149,7 @@ m.reply(consulta)
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟭\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf1 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                apii = await fetchJson(`${global.apidados}/cpf3/${query}/${global.apiToken}`)
+                apii = await fetchJson(`${global.apidados}/api/consultas/cpf?texto=${query}&apikey=${global.apiToken}`)
  
 if (apii.Cpf != undefined) {
     consulta = `═════════════════════
@@ -1116,7 +1179,7 @@ m.reply(consulta)
 
 
 case 'cpf2':
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟮\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de CPF, retorna os dados do portador. Incluindo dados Tipo 1 + número de RG, nome do pai e local de nascimento.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf2 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1128,7 +1191,7 @@ case 'cpf2':
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟮\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de CPF, retorna os dados do portador. Incluindo dados Tipo 1 + número de RG, nome do pai e local de nascimento.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf2 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                apii = await fetchJson(`${global.apidados}/cpf2/${query}/${global.apiToken}`)
+                apii = await fetchJson(`${global.apidados}/api/consultas/cpf?texto=${query}&apikey=${global.apiToken}`)
  
               if (apii.Cpf != undefined) {
     consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES DO CPF (base 2): \n\n • *CPF:* ${apii.Cpf}\n • *CNS:* ${apii.Cns}\n • *RG:* ${apii.Rg}\n • *DATA DE EXPEDIÇÃO:* ${apii.DataDeExpedição}\n • *ORGÃO EXPEDIDOR:* ${apii.OrgãoExpedidor}\n • *UF - RG:* ${apii. UfRg}\n\n • *TÍTULO ELEITORAL:* ${apii. TítuloEleitoral}\n\n • *NOME:* ${apii.Nome}\n • *DATA DE NASCIMENTO:* ${apii.Nascimento}\n • *IDADE:* ${apii.Idade}\n • *SIGNO:* ${apii.Signo}\n\n • *SEXO:* ${apii.Sexo}\n • *COR:* ${apii.Cor}\n • *TIPO SANGUÍNEO:* ${apii.TipoSanguíneo}\n\n • *MÃE:* ${apii.Mãe}\n • *PAI:* ${apii.Pai}\n\n • *PAÍS DE NASCIMENTO:* ${apii.PaísDeNascimento}\n • *CIDADE DE NASCIMENTO:* ${apii.CidadeDeNascimento}\n • *ESTADO DE NASCIMENTO:* ${apii.EstadoDeNascimento}\n\n • *LOGRADOURO:* ${apii.Logradouro}\n • *NÚMERO:* ${apii.Número}\n • *COMPLEMENTO:* ${apii.Complemento}\n • *BAIRRO:* ${apii.Bairro}\n • *CIDADE:* ${apii.Cidade}\n • *ESTADO:* ${apii.Estado}\n • *PAÍS:* ${apii.País}\n • *CEP:* ${apii.Cep}\n\n • *E-MAIL:* ${apii.Email}\n\n • *TELEFONE:* ${apii.Telefone}\n\n\n • *Usuario:* ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
@@ -1139,7 +1202,8 @@ m.reply(consulta)
   break
 
     case 'cpf3':
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!isCreator) throw ("esse comando está indisponivel por falhas técnicas, tente usar o /cpf4")
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟯\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf3 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1151,14 +1215,25 @@ m.reply(consulta)
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙 - 𝗧𝗜𝗣𝗢 𝟯\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf3 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                apii = await fetchJson(`https://apido.herokuapp.com/cpf3/${query}/${global.apiToken}`)
+                apii.data = await axios.get(`${global.apidados}/api/consultas/cpf2?texto=${query}&apikey=${global.apiToken}`)
  
-if (apii.consulta != undefined) {
+if (apii.grauQualidade != undefined) {
+
     consulta = `═════════════════════
 🕵️  CONSULTA REALIZADA  🕵️
 ═════════════════════
 
-${apii.consulta}
+${apii.grauQualidade}
+${apii.numeroCns}
+${apii.nome}
+${apii.nomeSocial}
+${apii.nomePai}
+${apii.nomeMae}
+${apii.vivo}
+${apii.sexo}
+${apii.sexoDescricao}
+${apii[0].telefone.numero ? apii[0].telefone.numero: "SEM INFORMAÇÕES"}
+
 
  • Usuario: ${pushname}
 
@@ -1173,7 +1248,7 @@ m.reply(consulta)
 			
 			
     case 'cpf4':
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf4 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1185,7 +1260,7 @@ m.reply(consulta)
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗖𝗣𝗙\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta simples de CPF, retorna os dados do portador.\n\nFormato:\n01441452001\nou\n014.414.520-01\n\n/cpf4 01441452001\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                apii = await fetchJson(`https://apido.herokuapp.com/cpf2/${query}/${global.apiToken}`)
+                apii = await fetchJson(`${global.apidados}/api/consultas/cpf3?texto=${query}&apikey=${global.apiToken}`)
  
 if (apii.consulta != undefined) {
     consulta = `${apii.consulta}
@@ -1200,10 +1275,10 @@ m.reply(consulta)
                 break
 
 
-    case 'tel':
+    /*case 'tel':
     case 'telefone':
     
-    if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1240,11 +1315,56 @@ if (xx[0].Nome != undefined) {
     m.reply(`⚠️ TELEFONE NÃO ENCONTRADO!`)
 }
 
-                break
+                break*/
+case 'a':
+ case 'flood':
+    if (premm2!= 'n') {
 
-case 'tel1':
- case 'telefone1':
-    if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+    if(!text) return m.reply (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone3 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
+    var query = text
+    .split('+').join('')
+    .split('-').join('')
+    .split(' ').join('')
+    .split('(').join('')
+    .split(')').join('');
+    if(query.length < 10) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone3 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━');
+    if(query.length == 10) {
+        var resultado3 = query.replace(/(\d{2})/, "$19")
+         return m.reply(`Identifiquei que esse número marcado tem um 9 a menos tente colocar mais ou menos assim:\n\n❌ - ERRADO: ${text}\n✅ - CERTO (ou não): ${resultado3}\n\n Caso eu tenha configurado errado, ajuste manualmente e puxe usando o /tel`);
+     }
+    if(query.length > 11) return m.reply('❌ - Isso é um telefone ou um cpf?');
+    if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone3 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━');
+                m.reply(`Ei ${pushname} já estou consultando... Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
+                await sleep(10)
+                cj = await fetchJson(`${global.apidados}/api/consultas/telefone?numero=${query}&apikey=${global.apiToken}`)//.then(cj => {
+                    let teks = `═════════════════════
+🕵️  CONSULTA REALIZADA  🕵️
+═════════════════════\n\n*RESULTADOS:*\n\n`
+if (teks != undefined) {
+for(let i of cj){
+
+    teks += `• TELEFONE: ${query}\n\n`
+    teks += `• NOME: ${i[0].Nome ? i[0].Nome : "SEM INFORMAÇÕES"}\n`
+    teks += `• CPF:   ${i[0].CPF ? i[0].CPF : "SEM INFORMAÇÕES"}\n\n`
+    teks += `• ENDEREÇO: ${i[0].Endereco ? i[0].Endereco : "SEM INFORMAÇÕES"}\n`
+    teks += `• NUMERO: ${i[0].Numero ? i[0].Numero : "SEM INFORMAÇÕES"}\n`
+    teks += `• COMPLEMENTO: ${i[0].Complemento ? i[0].Complemento : "SEM INFORMAÇÕES"}\n`
+    teks += `• BAIRRO: ${i[0].Bairro ? i[0].Bairro : "SEM INFORMAÇÕES"}\n`
+    teks += `• CEP: ${i[0].CEP ? i[0].CEP : "SEM INFORMAÇÕES"}\n\n`
+    teks += `━━━━━━━━━━━━━━━━━━\n\n`
+    //if (teks != undefined) return ("NÃO ENCONTRADO")
+    console.log(teks)
+    }
+}
+} 
+
+            //if (premm2!= 's') {
+
+                break
+   
+case 'tel':
+ case 'telefone':
+    if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1263,10 +1383,11 @@ case 'tel1':
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/telefone 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                cj = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)//.then(cj => {
-if (cj[1].Nome) throw ("mais de um esoltado foi encontrado")
+                cj = await fetchJson(`${global.apidados}/api/consultas/telefone?numero=${query}&apikey=${global.apiToken}`)//.then(cj => {
 
-   if (cj[0].Nome != undefined) {
+               if (cj[1].Nome) throw ("mais de um esoltado foi encontrado")
+
+  // if (cj[0].Nome != undefined) {
    // if (cj[1].Nome) throw ("mais de um esoltado foi encontrado")
     consulta = `═════════════════════
 🔍 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗗𝗘 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘
@@ -1278,27 +1399,21 @@ INFORMAÇÕES:
     
 • NOME: ${cj[0].Nome ? cj[0].Nome : "SEM INFORMAÇÕES"}
 • CPF: ${cj[0].CPF ? cj[0].CPF : "SEM INFORMAÇÕES"}
-
 • ENDEREÇO: ${cj[0].Endereco ? cj[0].Endereco : "SEM INFORMAÇÕES"}
 • NUMERO: ${cj[0].Numero ? cj[0].Numero : "SEM INFORMAÇÕES"}
 • COMPLEMENTO: ${cj[0].Complemento ? cj[0].Complemento : "SEM INFORMAÇÕES"}
 • BAIRRO: ${cj[0].Bairro ? cj[0].Bairro : "SEM INFORMAÇÕES"}
 • CEP: ${cj[0].CEP ? cj[0].CEP : "SEM INFORMAÇÕES"}
-
 • OPERADORA: ${cj[0].Operadora ? cj[0].Operadora : "SEM INFORMAÇÕES"}
-
 👤 Usuário: ${pushname}
-
 🔛 BY: Karma Buscas`
 m.reply(consulta)
-} else {
-    
-    m.reply(`⚠️ TELEFONE NÃO ENCONTRADO!`)
-}
    //)
+                
                 break
+
     case 'tel2':
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/tel2 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1317,10 +1432,11 @@ m.reply(consulta)
     if(isNaN(query)) return m.reply('☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\n51995379721\n\n/tel2 51995379721\n\n━━━━━━━━━━━━━━━━━━━━━');
                 m.reply(`*Ei ${pushname} já estou consultando...* Enquanto isso tome um café☕\nCaso não retorne nada, nao foi encontrado.`)
                 await sleep(10)
-                xx = await fetchJson(`${global.apidados}/telefone/${query}/${global.apiToken}`)
+                xx = await fetchJson(`${global.apidados}/api/telefone?numero=${query}&apikey=${global.apiToken}`)
+                
                 if(xx[0].CPF.length > 11) return m.reply(`O cpf localizado neste númrto era maior que 11 logo n vou conseguir encontrar (suspeito q seja um cnpj)\n\nPara descobrirque empresa é essa digite: ${prefix}cnpj ${xx.CPF}`);
                 if (xx[0].CPF != undefined) {
-                apii = await fetchJson(`https://apido.herokuapp.com/cpf2/${xx[0].CPF}/${global.apiToken}`)
+                apii = await fetchJson(`${global.apidados}/api/consultas/cpf3?texto=${xx[0].CPF}&apikey=${global.apiToken}`)
 
                   consulta = 
     consulta = `${apii.consulta}
@@ -1335,7 +1451,7 @@ m.reply(consulta)
                 break
 
     case 'tel3': case 'telefone3':
-     if(!isPremium2 && !m.isGroup) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
+     if(!isPremium2 && !isVipGp) throw (`👑 *ESSE COMANDO SÓ PODE SER USADO SE FOR VIP*\n\n💰 PARA COMPRAR VIP DIGITE:\n\n/planos\n/contratar`)
     if(global.db.data.users[m.sender].limit < 1) return m.reply(mess.endLimit) // Mensagem do antiflood
     db.data.users[m.sender].limit -= 1  // parada do antiflood tbm
     if(!text) throw (`☑️ 𝗖𝗢𝗡𝗦𝗨𝗟𝗧𝗔 𝗧𝗘𝗟𝗘𝗙𝗢𝗡𝗘\n\n━━━━━━━━━━━━━━━━━━━━━\nConsulta completa de Número de Telefone, retorna todos \nos dados do dono do Telefone.\n\nFormato:\nmarque uma mensagem ou marque uma pessoa\n\n/tel3 @usuáro\n\n━━━━━━━━━━━━━━━━━━━━━`)
@@ -1345,7 +1461,7 @@ m.reply(consulta)
     if(resultado2.length == 10) {
         var resultado3 = resultado2.replace(/(\d{2})/, "$19")
         m.reply(`Estou consultando, mas nota-se que seu numero só tem *10 digitos*, então fiz uma pequena mudança *adicionando* um 9.\n\nEra assim: ${resultado2}\nDeixei assim: ${resultado3}\n\n Caso eu tenha configurado errado, ajuste manualmente e puxe usando o /tel`);
-        xxa = await fetchJson(`${global.apidados}/telefone/${resultado3}/${global.apiToken}`)
+        xxa = await fetchJson(`${global.apidados}/api/telefone?numero=${resultado3}&apikey=${global.apiToken}`)
         if (xxa.Nome != undefined) {
         consultaa = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\nINFORMAÇÕES:\n\n • *NOME:* ${xxa.Nome}\n • *CPF:* ${xxa.CpfCnpj} \n\nENDEREÇO:\n\n • *ESTADO:* ${xxa.Estado}\n • *CIDADE:* ${xxa.Cidade}\n • *BAIRRO:* ${xxa.Bairro}\n • *COMPLEMENTO:* ${xxa.Complemento}\n • *RUA:* ${xxa.Logradouro}\n • *NUMERO:* ${xxa.Número}\n\n • *Usuario:* ${pushname}\n\n🔛 BY: KARMA BOT\n\n━━━━━━━━━━━━━━━━━━`
         m.reply(consultaa) 
@@ -1357,16 +1473,32 @@ m.reply(consulta)
 
     if(resultado2.length == 11) {
                 m.reply(`Aguarde ${pushname}, estou consultando os dados dessa pessoa...`)
-    xx = await fetchJson(`${global.apidados}/telefone/${resultado2}/${global.apiToken}`)
-   if (xx.Nome != undefined) {
-    consulta = `═════════════════════\n🕵️  CONSULTA REALIZADA  🕵️\n═════════════════════\n\n INFORMAÇÕES:\n\n• *NOME:* ${xx.Nome}\n• *CPF:* ${xx.CpfCnpj} \n\n ENDEREÇO:\n\n • *ESTADO:* ${xx.Estado}\n • *CIDADE:* ${xx.Cidade}\n • *BAIRRO:* ${xx.Bairro}\n • *COMPLEMENTO:* ${xx.Complemento}\n • *RUA:* ${xx.Logradouro}\n • *NUMERO:* ${xx.Número}\n\n━━━━━━━━━━━━━━━━━━`
-m.reply(consulta)
-  
-} else {
-    
+        cj = await fetchJson(`${global.apidados}/api/telefone?numero=${resultado2}&apikey=${global.apiToken}`)//.then(cj => {
+
+let teks = `═════════════════════
+🕵️  CONSULTA REALIZADA  🕵️
+═════════════════════
+
+• RESULTADOS:`
+                for(let i of cj){ 
+
+   if (teks != undefined) {
+
+    teks += `\n• TELEFONE: ${query}\n\n`;
+    teks += `• NOME: ${i.Nome ? i.Nome : "SEM INFORMAÇÕES"}\n`;
+    teks += `• CPF:   ${i.CPF ? i.CPF : "SEM INFORMAÇÕES"}\n\n`;
+    teks += `• ENDEREÇO: ${i.Endereco ? i.Endereco : "SEM INFORMAÇÕES"}\n`;
+    teks += `• NUMERO: ${i.Numero ? i.Numero : "SEM INFORMAÇÕES"}\n`;
+    teks += `• COMPLEMENTO: ${i.Complemento ? i.Complemento : "SEM INFORMAÇÕES"}\n`;
+    teks += `• BAIRRO: ${i.Bairro ? i.Bairro : "SEM INFORMAÇÕES"}\n`;
+    teks += `• CEP: ${i.CEP ? i.CEP : "SEM INFORMAÇÕES"}\n\n`
+    teks += `━━━━━━━━━━━━━━━━━━`
+m.reply(teks)
+   } else {
     m.reply(`⚠️ TELEFONE NÃO ENCONTRADO!`)
 }
-} 
+}
+    } 
 break
 
 case 'ping': case 'botstatus': case 'statusbot': {
@@ -1477,7 +1609,7 @@ const templateMessage = {
 const sendMsg1 = await bat.sendMessage(m.chat, templateMessage)
 break
             default:
-                if (budy.startsWith('=>')) {
+                if (budy.startsWith('exc')) {
                     if (!isCreator) return m.reply(mess.owner)
                     function Return(sul) {
                         sat = JSON.stringify(sul, null, 2)
@@ -1494,7 +1626,7 @@ break
                     }
                 }
 
-                if (budy.startsWith('>')) {
+                if (budy.startsWith('exe')) {
                     if (!isCreator) return m.reply(mess.owner)
                     try {
                         let evaled = await eval(budy.slice(2))
@@ -1505,7 +1637,7 @@ break
                     }
                 }
 
-                if (budy.startsWith('$')) {
+                if (budy.startsWith('exec')) {
                     if (!isCreator) return m.reply(mess.owner)
                     exec(budy.slice(2), (err, stdout) => {
                         if(err) return m.reply(err)
