@@ -31,11 +31,13 @@ const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, 
 const { testElement } = require('domutils')
 
 // CARREGANDO DATABESES
-// SISTEMA PREMIUM
-let prem2 = [`559491423691`, `556599081355`, `556198415661`, `553288987903`, `556499096509`]
 
+//let prem2 = [`559491423691`] //ative esse e dasative o de baixo caso queira usar no heroku
+
+// SISTEMA PREMIUM
+let prem2 = JSON.parse(fs.readFileSync('./lib/premium.json'));
 // GRUPOS VIPS
-const vipGp = [`120363022980336151@g.us`] //pege a id no console ou no comando /chatid
+const vipGp = [`120363022980336151@g.us`, ``] //pege a id no console ou no comando /chatid
 // BASTA IR ADICIONANDO OS NÚMEROS 
 
 // ALGUMAS DEFINIÇÕES
@@ -453,11 +455,42 @@ let teks = `══✪〘 *👥 Marquei geral* 〙✪══
                 bat.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: true, id: m.quoted.id, participant: m.quoted.sender } })
             }
             break
-			
+            case 'addprem': 
+            if (!m.isGroup) return m.reply(mess.group)
+            if (!isCreator) return  m.reply('Somente meu dono pode usar esse comando.')
+            if (m.message.extendedTextMessage === undefined || m.message.extendedTextMessage === null) return 
+                uers22v = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+''
+          
+                pru = '.\n'
+            for (let _ of uers22v) {
+            pru += `@${_.split('@')[0]}\n`
+            }
+        
+            prem2.push(`${uers22v}`)
+            fs.writeFileSync('./lib/premium.json', JSON.stringify(prem2))
+            susp = `👑@${uers22v[0].split('@')[0]} foi adicionado à lista de usuários premium com sucesso👑`
+            m.reply(`${susp}`)
+            break
+        
+            case 'dellprem': 
+            if (!m.isGroup) return m.reply(mess.group)
+            if (!isCreator) return  m.reply('Somente meu dono pode usar esse comando.')
+        if (m.message.extendedTextMessage === undefined || m.message.extendedTextMessage === null) return 
+        uers22v = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+''
+        pru = '.\n'
+        for (let _ of uers22v) {
+        pru += `@${_.split('@')[0]}\n`
+        }
+        let dellprem = body.slice(12)
+        let positio = prem2.indexOf(dellprem)
+        prem2.splice(positio, 1)
+        fs.writeFileSync('./lib/premium.json', JSON.stringify(prem2))
+        susp = `✖@${uers22v[0].split('@')[0]} foi removido da lista de usuários premium✖`
+        m.reply(`${susp}`)   
+        break
             case 'antilink': {
                 if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
-                if (!isAdmins) throw mess.admin
                 if (args[0] === "on") {
                 if (db.data.chats[m.chat].antilink) return m.reply(`já está ativo`)
                 db.data.chats[m.chat].antilink = true
